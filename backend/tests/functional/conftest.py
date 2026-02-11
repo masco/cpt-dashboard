@@ -8,6 +8,7 @@ snapshot. Since the Opensearch is started in an isolated pod, we can't
 script this from outside the pod; so we run this little Python program
 inside the Opensearch container.
 """
+
 import os
 import time
 

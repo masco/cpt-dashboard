@@ -2,7 +2,11 @@ from datetime import date
 
 import pandas as pd
 
-from app.api.v1.commons.constants import OSO_FIELD_CONSTANT_DICT
+from app.api.v1.commons.constants import (
+    JOB_STATUS_MAP,
+    JOB_STATUS_OTHERS,
+    OSO_FIELD_CONSTANT_DICT,
+)
 import app.api.v1.commons.utils as utils
 from app.services.search import ElasticService
 
@@ -51,6 +55,13 @@ async def getData(
     if len(jobs) == 0:
         return {"data": jobs, "total": response["total"]}
 
+    jobs["jobStatus"] = jobs["jobStatus"].apply(
+        lambda v: (
+            JOB_STATUS_MAP.get(str(v).lower(), JOB_STATUS_OTHERS)
+            if pd.notna(v) and str(v).strip()
+            else JOB_STATUS_OTHERS
+        )
+    )
     return {"data": jobs, "total": response["total"]}
 
 
